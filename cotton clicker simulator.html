@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotton Clicker Simulator</title>
+    <script>
+        var a = 1;
+        var wynik = 0;
+        var rebirth_ammount = 0;
+        var rebirth_value = 50;
+        var item1_value=200;
+        var item1_bought=false;
+        var item2_value=750;
+        var item2_bought=false;
+        function dodawanie() {
+            wynik = wynik + a;
+            document.getElementById("licznik").innerHTML = wynik.toFixed(1);
+            document.getElementById("mnoznik").innerHTML = "x"+a.toFixed(2);    
+        }
+        function doRebirth() {
+            if (wynik >= rebirth_value) {
+                wynik = 0;
+                rebirth_ammount = rebirth_ammount + 1;
+                a = parseFloat(a * 1.2);
+                rebirth_value=rebirth_value*2;
+            } else {
+                alert("Nie stać cię na rebirtha");
+            }
+            document.getElementById("rebirthy").innerHTML = rebirth_ammount;
+            document.getElementById("licznik").innerHTML = wynik.toFixed(1);
+            document.getElementById("kosztRebirthu").innerHTML = "koszt nastepnego rebirthu = " + rebirth_value;
+            document.getElementById("mnoznik").innerHTML = "x"+a.toFixed(2);    
+        }
+        function buyitem1(){
+          if(!item1_bought&&wynik>=item1_value){
+            wynik-=item1_value;
+            a=a*1.5;
+            item1_bought=true;
+            alert("kupiłeś bicz który zwiększa twoje kliknięcia razy 1.5!!");
+            document.getElementById("kup1").innerHTML = "zakupiono";
+          }else if(item1_bought){
+            alert("posiadasz już bicz")
+          }
+          else{
+            alert("nie stać cię na bicz");
+          }
+          document.getElementById("licznik").innerHTML = wynik.toFixed(1);
+          document.getElementById("mnoznik").innerHTML = "x"+a.toFixed(2);    
+        }
+        function buyitem2(){
+          if(!item2_bought&&wynik>=item2_value){
+            wynik-=item2_value;
+            a=a*2.0;
+            item2_bought=true;
+            alert("kupiłeś pasek który zwiększa twoje kliknięcia razy 2!!");
+            document.getElementById("kup2").innerHTML = "zakupiono";
+          }else if(item2_bought){
+            alert("posiadasz już pasek")
+          }
+          else{
+            alert("nie stać cię na pasek");
+          }
+          document.getElementById("licznik").innerHTML = wynik.toFixed(1);
+          document.getElementById("mnoznik").innerHTML = "x"+a.toFixed(2);    
+        }
+        function ShowSklepik() {
+            var sklepikDiv = document.getElementById("sklepikDiv");
+    if (sklepikDiv.style.display === "none") {
+        sklepikDiv.style.display = "block";   
+    } else {
+        sklepikDiv.style.display = "none";
+    }
+}
+function CloseSklepik() {
+    var sklepikDiv = document.getElementById("sklepikDiv");
+    sklepikDiv.style.display = "none";
+}
+function saveGame() {
+    var confirmSave = confirm("Czy na pewno chcesz zapisać grę?");
+    if (confirmSave) {
+        var gameData = {
+            wynik: wynik,
+            rebirth_ammount: rebirth_ammount,
+            a: a,
+        };
+        var gameDataJSON = JSON.stringify(gameData);
+        localStorage.setItem('savedGame', gameDataJSON);
+        alert("Gra zapisana!");
+    } else {
+        alert("Zapisanie gry anulowane.");
+    }
+}
+function loadGame() {  
+    var confirmLoad = confirm("Czy na pewno chcesz wczytać grę?");
+    if (confirmLoad) {
+        var savedGameData = localStorage.getItem('savedGame');
+        if (savedGameData) {     
+            var savedGame = JSON.parse(savedGameData);
+            wynik = savedGame.wynik;
+            rebirth_ammount = savedGame.rebirth_ammount;
+            a = savedGame.a;
+            updateUI();
+            alert("Gra wczytana!");
+        } else {
+            alert("Brak zapisanej gry.");
+        }
+    } else {
+        alert("Wczytanie gry anulowane.");
+    }
+}
+function updateUI() {
+    document.getElementById("licznik").innerHTML = wynik.toFixed(1);
+    document.getElementById("rebirthy").innerHTML = rebirth_ammount;
+    document.getElementById("kosztRebirthu").innerHTML = "koszt rebirthu = " + rebirth_value;
+    document.getElementById("mnoznik").innerHTML = "x" + a.toFixed(2);
+}
+    </script>
+     <style>
+     .tło {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    object-fit: cover;
+}
+        body {
+    overflow: hidden;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    color: white;
+    font-size: 20px;
+    background: url('twoje-tło.jpg') no-repeat center center fixed;
+}
+        .sklepik {
+    background-color: rgb(10, 13, 143);
+    padding: 20px;
+    border-radius: 10px;
+    width: 800px;
+    height: 600px;
+    margin-bottom: 150px;
+    margin-left:125px;
+    margin-right: 10px; 
+    text-align: center;
+    letter-spacing: 10px;
+    position: relative; 
+}
+.klikniecia {
+    background-color: rgb(10, 13, 143);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: auto;
+    margin-bottom: 150px;
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+        button {
+            margin-top: 5px;
+        }
+
+        .informacje {
+            background-color: rgb(10, 13, 143);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 200px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 200px;
+            margin-bottom: 150px;
+            margin-left: 10px;
+        }
+
+        .header {
+            text-align: center;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1px;
+            margin: 0 auto;
+            font-size: 40px;
+            letter-spacing: 10px;
+            color: white;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            text-shadow: 8px 8px 16px rgb(0, 0, 0);
+        }
+        .item1{
+            text-align:left;
+            margin-left:30px;
+            width:150px;
+            height:200px;
+            background-color:rgb(18, 84, 158);
+            border-radius:10px;
+            float:left;
+        }
+        .whip{
+            text-align:center;     
+        }
+        .bicz{
+            margin-top:5px;
+        }
+        .item1button{
+            width:125px;
+            height:50px;
+            background-color: rgb(10, 13, 143);
+            color:white;
+        }
+        .item1button:hover{
+        background-color: black;
+        }
+        .item2{
+            text-align:left;
+            margin-left:30px;
+            width:150px;
+            height:200px;
+            background-color:rgb(18, 84, 158);
+            border-radius:10px;
+            float:left;
+        }
+        .belt{
+            text-align:center;     
+        }
+        .pasek{
+            margin-top:5px;
+        }
+        .item2button{
+            width:125px;
+            height:50px;
+            background-color: rgb(10, 13, 143);
+            color:white;
+        }
+        .item2button:hover{
+        background-color: black;
+        }
+        .pokazbutton{
+            width:200px;
+            height:50px;
+            background-color:rgb(18, 84, 158);
+            color:white;
+        }
+        .zamknijButton {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.savik{
+    width:200px;
+    height:50px;
+    background-color:rgb(18, 84, 158);
+    color:white; 
+    margin-top:10px;
+}
+.loadzik{
+    width:200px;
+    height:50px;
+    background-color:rgb(18, 84, 158);
+    color:white;
+    margin-top:10px;
+}
+    </style>
+</head>
+<body>
+    <div class="tło">
+       <img src="tło1.jpg" width="100%" height="100%">
+        </div>   
+    <div class="informacje">
+       <h3>OPCJE</h3>
+       <button class="pokazbutton" onclick="ShowSklepik()">Sklepik</button> 
+       <button onclick="saveGame()" class="savik">Zapisz grę</button> 
+       <button onclick="loadGame()" class="loadzik">Wczytaj grę</button>
+    </div>
+    <div>
+    <div class="header">
+        <br>
+        <h1>Cotton Clicker Simulator</h1>
+    </div>
+     <div class="sklepik" id="sklepikDiv" style="display: none;">
+   <h1>SKLEPIK</h1><br>
+   <button onclick="CloseSklepik()" class="zamknijButton">X</button>
+   <div class="item1">
+    <div class="whip">
+        Bicz<br>
+        <img src="bicz-removebg-preview.png" width="100px" height="100px" class="bicz"><br>
+        <button onclick="buyitem1()" class="item1button"><span id="kup1">200</span></button>
+   </div>
+   </div>
+   <div class="item2">
+    <div class="belt">
+        Pasek<br>
+        <img src="pasek-removebg-preview.png" width="100px" height="100px" class="pasek"><br>
+        <button onclick="buyitem2()" class="item2button"><span id="kup2">750</span></button>
+    </div>
+   </div>
+     </div>
+     </div>
+    <div class="klikniecia">
+    <p>Aktualny mnożnik: <span id="mnoznik">x1.00</span></p>     
+    <p>Kliknięcia: <span id="licznik">0</span></p>
+    <button  onclick="dodawanie()">  
+    <img src="klikniecie.png" width="100px" height="100px" class="img1">
+    </button>  
+    <p id="kosztRebirthu">Koszt rebirthu = 50</p>
+    <p>Rebirthy: <span id="rebirthy">0</span></p>
+    <button onclick="doRebirth()">
+    <img src="rebirth.jpg" width="100px" height="100px">
+    </button>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
